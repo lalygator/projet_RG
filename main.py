@@ -1,15 +1,3 @@
-Conversation ouverte. 1 message non lu.
-
-Aller au contenu
-Utiliser Gmail avec un lecteur d'écran
-2 sur 421
-code RG
-Boîte de réception
-
-KR
-19:05 (il y a 1 heure)
-À moi
-
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
