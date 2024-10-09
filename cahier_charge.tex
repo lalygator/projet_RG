@@ -29,7 +29,7 @@
 
 %Cahier de charges
 
-Le but de notre projet est de décrire la trajectoire d’une étoile autour d’un trou noir pour différentes géométrie (2D et 3D), et étudier les conséquences physiques du trou noir sur l'étoile. Pour cela, nous utiliserons les outils mathématiques de la relativité générale (que nous décrirons par la suite) pour résoudre numériquement les équations du mouvement. 
+Le but de notre projet est de décrire la trajectoire d'un objet physique, comme une étoile ou autre corps céleste autour d’un trou noir pour différentes géométrie (2D et 3D), et étudier les phénomènes physiques lié au interactions du corps avec le trou noir. Pour cela, nous utiliserons les outils mathématiques de la relativité générale (que nous décrirons par la suite) pour résoudre numériquement les équations du mouvement. 
 De même, nous souhaitons également étudier les effets du trou noir sur la lumière, en particulier le décalage gravitationnel vers le rouge et l’inflexion des rayons lumineux.
 
 % Est ce qu'on met un truc dans ce style ? :
@@ -42,7 +42,7 @@ De même, nous souhaitons également étudier les effets du trou noir sur la lum
     \item Représentation du mouvement elliptique (Newton) et du mouvement du périhélie, 
     \item Inflexion des rayons lumineux
     \item Décalage gravitationnel de la lumière vers le rouge 
-    \item Effet du trou noir sur l’étoile (temps propre beaucoup plus lent, déformation si c’est trop proche ??)
+    \item Interprétation  des résultats au sens physique
 \end{itemize}
 
 \section{Les outils mathématiques pour la relativité générale}
@@ -135,7 +135,7 @@ Au final, on obtient à l'entrée: $(r_0,\varphi_0,\dot r_0, \dot \varphi_0)$. O
 
 Pour réaliser ce projet, nous allons créer plusieurs classes qui vont nous permettre de modéliser les différents objets célestes et de réaliser les calculs nécessaires. \\
 
-Nous présentons ici la structure des objets que nous allons implémenter pour réaliser ce projet :
+Nous présentons ici la structure des objets que nous allons implémenter pour réaliser ce projet:
 
 \begin{python}
     class corps_celeste:
