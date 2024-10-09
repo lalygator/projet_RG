@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1.2in]{geometry}
+\usepackage[a4paper, left=3cm, right=3cm, top=3cm, bottom=3cm]{geometry}
 \usepackage[parfill]{parskip}
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
 \usepackage{sectsty}
@@ -9,11 +9,13 @@
 \usepackage{enumitem}
 \usepackage{pifont}
 \usepackage{hyperref}
+\usepackage{tcolorbox}
 
-%\sectionfont{\centering}
-\title{{Cahier des charges — Projet UE Informatique L3 Physique}\vspace{2em}
-\begin{large} Relativité Générale - Étude du mouvement d'une étoile autour d'un trou noir de Schwarzschild
-\end{large} }
+
+\title{\underline{Cahier des charges — Projet UE Informatique L3 Physique}\vspace{2em}
+\tcbox[colframe=black,colback=white,boxrule=0.5mm]{\begin{minipage}{1\textwidth} % Ajuster la largeur ici
+\centering \textbf{\Large Relativité Générale - Étude du mouvement d'une étoile autour d'un trou noir de Schwarzschild}
+\end{minipage}}}
 \author{Klara Piotrowska, Laly Boyer}
 %\setcounter{tocdepth}{5}
 \begin{document}
@@ -30,18 +32,18 @@
 Le but de notre projet est de décrire la trajectoire d’une étoile autour d’un trou noir pour différentes géométrie (2D et 3D), et étudier les conséquences physiques du trou noir sur l'étoile. Pour cela, nous utiliserons les outils mathématiques de la relativité générale (que nous décrirons par la suite) pour résoudre numériquement les équations du mouvement. 
 De même, nous souhaitons également étudier les effets du trou noir sur la lumière, en particulier le décalage gravitationnel vers le rouge et l’inflexion des rayons lumineux.
 
-% Dans la partie 2, nous listerons les objectifs principaux du projet. Dans la partie 3, nous décrirons les outils mathématiques nécessaires pour la résolution numérique du problème. Ensuite, dans la partie 4, nous expliquerons comment nous allons appliquer ces outils pour obtenir les trajectoires des objets. Enfin, dans la partie 5, nous décrirons la structure des objets que implémenterons pour réaliser ce projet.
+% Est ce qu'on met un truc dans ce style ? :
+%   Dans la partie 2, nous listerons les objectifs principaux du projet. Dans la partie 3, nous décrirons les outils mathématiques nécessaires pour la résolution numérique du problème. Ensuite, dans la partie 4, nous expliquerons comment nous allons appliquer ces outils pour obtenir les trajectoires des objets. Enfin, dans la partie 5, nous décrirons la structure des objets que implémenterons pour réaliser ce projet.
 
 \section{Objectifs principaux} 
 \begin{itemize}[label=\textendash]
     \item Étude de la trajectoire de l’étoile autour du trou noir en fonction des conditions initiales imposées sur le systèmes (géodésique sur surface 2D courbe)
-    \item  Représentation en 3D de la trajectoire de l’étoile autour du trou noir
+    \item Représentation en 3D de la trajectoire de l’étoile autour du trou noir
     \item Représentation du mouvement elliptique (Newton) et du mouvement du périhélie, 
     \item Inflexion des rayons lumineux
     \item Décalage gravitationnel de la lumière vers le rouge 
     \item Effet du trou noir sur l’étoile (temps propre beaucoup plus lent, déformation si c’est trop proche ??)
 \end{itemize}
-
 
 \section{Les outils mathématiques pour la relativité générale}
 
@@ -54,14 +56,14 @@ Soit la métrique de Schwarzschild définie telle que:
 Puisqu’on se place dans un plan défini par $\theta$ constant et égale à $\frac{\pi}{2}$, on peut simplifier l’expression de l'intervalle d'espace-temps:
 \[ ds^2 = -\left(1-\frac{2GM}{c^2r}\right)dt^2+\left(1-\frac{2GM}{c^2r}\right)^{-1}dr^2+r^2d\varphi^2\]
 
-Pour simuler numériquement un tel espace, nous avons d’abord besoin d'établir les équations géodésiques, qui vont définir le chemin le plus court entre deux points de l’espace. Pour cela, on résout les équations d’Euler Lagrange associées au système. Le lagrangien est défini comme : 
+Pour simuler numériquement un tel espace, nous avons d’abord besoin d'établir les équations géodésiques, qui vont définir le chemin le plus court entre deux points de l’espace. Pour cela, on résout les équations d’Euler Lagrange associées au système. Le lagrangien est défini comme
 \[\mathbf L=\frac{1}{2}\left(\left(1-\frac{2GM}{c^2r}\right)c^2\dot t^2-\left(1-\frac{2GM}{c^2r}\right)^{-1}\dot r^2 - r^2\dot \varphi^2\right)\]
 
 \newpage
 
 \underline{Résolution des équations EL} :
 \begin{itemize}[label=\textendash]
-    \item $t$ et $\varphi$ sont des variables cycliques qui donnent les deux constantes de mouvement $E$ et $L$ telles que : 
+    \item $t$ et $\varphi$ sont des variables cycliques qui donnent les deux constantes de mouvement $E$ et $L$ tel que : 
     \begin{equation}\label{eq:1}\left(1-\frac{2GM}{c^2r}\right)\dot t = E = \text{cte}=\text{énergie totale de la particule conservée}\end{equation}\vspace{-2em}
 
     \begin{equation}\label{eq:2}r^2\dot \varphi = L = \text{cte}=\text{moment cinétique conservé}\end{equation}
@@ -82,7 +84,6 @@ Ensuite, on choisit de fixer $\mathbf{L}$ à $\frac{1}{2}$ dans le cas du mouvem
     \end{equation}
     \item Pour une particule massive ($\mathbf L=\frac{1}{2}$): 
     \begin{equation}\label{eq:4}\frac{d\dot r}{d\tau}=-\frac{M}{r^2}+\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)\end{equation}
-
 \end{itemize}
 
 \section{Application — Recherche de trajectoire}
@@ -98,6 +99,8 @@ En faisant varier les différents paramètres (masse $M$, position ou vitesse in
 \paragraph{Conditions initiales}
 Les conditions initiales données en input $(r_0, \varphi_0, V_{r_0}, V_{\varphi_0})$ sont définies dans un référentiel d'observateur distant du système \emph{(dans un temps ultérieur on pourrait tester également le cas où les C.I et les représentations graphiques concernent le référentiel propre, a voir si cela présente un intérêt réel)}.
 
+\newpage
+
 Pour pouvoir effectuer le calcul, on doit convertir les vitesses initiales en les dérivant par rapport au temps propre $\tau$. On établit la relation suivante:
 
 \[\left(\frac{dr_0}{dt}, \frac{d\varphi_0}{dt}\right)=\left(\frac{\dot r_0}{\dot t_0}, \frac{\dot \varphi _0}{\dot t_0}\right)\]
@@ -105,7 +108,7 @@ Pour pouvoir effectuer le calcul, on doit convertir les vitesses initiales en le
 On peut alors calculer les conditions initiales dans le référentiel propre. 
 
 Pour une particule massive (cas $\mathbf L=\frac{1}{2}$) :
-%%% Pas sûr du premier terme on dirait c'est un 1
+%%% par déduction c'est bien ça normalement (pitié que ce soit ça)
 \[\mathbf L=\left[\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right]t_0^2\]
 
 Les conditions initiales dans le référentiel propre valent donc :
@@ -117,9 +120,7 @@ Les conditions initiales dans le référentiel propre valent donc :
 On utilise alors ces conditions pour calculer les quantités conservées $E$ et $L$:
 \begin{align*}&E=\left(1-\frac{2M}{r_0}\dot t_0\right) \iff E=\left(1-\frac{2M}{r_0}\right)\cdot\left(\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right)^{\frac{1}{2}} \\
 &L = r_0^2 V_{\varphi_0}\dot t_0 \iff L= r_0^2 V_{\varphi_0}\left(\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right)^{\frac{1}{2}}\end{align*}
-%SOUCIS PARENTHESES
-
-
+%Soucis parenthèses par rapport au Google doc
 
 \paragraph{Système différentiel} 
 Au final, on obtient à l'entrée: $(r_0,\varphi_0,\dot r_0, \dot \varphi_0)$. On peut exprimer le système différentielle par 4 relation d'incrémentation à utiliser dans \texttt{odeint} : 
@@ -129,18 +130,12 @@ Au final, on obtient à l'entrée: $(r_0,\varphi_0,\dot r_0, \dot \varphi_0)$. O
 &\frac{d\varphi}{d\tau}=\frac{L}{r^2}&\to\text{increment }\varphi\\
 &\frac{d\dot r}{d\tau}=-\frac{M}{r^2}+\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)&\to\text{increment } \dot r
 \end{align*}
-
-% \begin{python}
-%     #(increment t)
-%     #(increment r)
-%     #(increment phi)
-%     #(increment r_dot)
-% \end{python}
-
+\newpage
 \section{Structure des objets}
 
-Pour réaliser ce projet, nous allons créer plusieurs classes qui vont nous permettre de modéliser les différents objets célestes et de réaliser les calculs nécessaires.
+Pour réaliser ce projet, nous allons créer plusieurs classes qui vont nous permettre de modéliser les différents objets célestes et de réaliser les calculs nécessaires. \\
 
+Nous présentons ici la structure des objets que nous allons implémenter pour réaliser ce projet :
 
 \begin{python}
     class corps_celeste:
@@ -196,7 +191,6 @@ Pour réaliser ce projet, nous allons créer plusieurs classes qui vont nous per
         def effet_trou_noir(self):
             #calcul de l'effet du trou noir sur l'etoile
             #representation graphique
-
 \end{python}
 \newpage
 \section{Références}
