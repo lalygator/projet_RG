@@ -1,0 +1,210 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[parfill]{parskip}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{sectsty}
+\usepackage{pythonhighlight}
+\usepackage{courier}
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage{hyperref}
+
+%\sectionfont{\centering}
+\title{{Cahier des charges — Projet UE Informatique L3 Physique}\vspace{2em}
+\begin{large} Relativité Générale - Étude du mouvement d'une étoile autour d'un trou noir de Schwarzschild
+\end{large} }
+\author{Klara Piotrowska, Laly Boyer}
+%\setcounter{tocdepth}{5}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+%Cahier de charges
+
+Le but de notre projet est de décrire la trajectoire d’une étoile autour d’un trou noir pour différentes géométrie (2D et 3D), et étudier les conséquences physiques du trou noir sur l'étoile. Pour cela, nous utiliserons les outils mathématiques de la relativité générale (que nous décrirons par la suite) pour résoudre numériquement les équations du mouvement. 
+De même, nous souhaitons également étudier les effets du trou noir sur la lumière, en particulier le décalage gravitationnel vers le rouge et l’inflexion des rayons lumineux.
+
+% Dans la partie 2, nous listerons les objectifs principaux du projet. Dans la partie 3, nous décrirons les outils mathématiques nécessaires pour la résolution numérique du problème. Ensuite, dans la partie 4, nous expliquerons comment nous allons appliquer ces outils pour obtenir les trajectoires des objets. Enfin, dans la partie 5, nous décrirons la structure des objets que implémenterons pour réaliser ce projet.
+
+\section{Objectifs principaux} 
+\begin{itemize}[label=\textendash]
+    \item Étude de la trajectoire de l’étoile autour du trou noir en fonction des conditions initiales imposées sur le systèmes (géodésique sur surface 2D courbe)
+    \item  Représentation en 3D de la trajectoire de l’étoile autour du trou noir
+    \item Représentation du mouvement elliptique (Newton) et du mouvement du périhélie, 
+    \item Inflexion des rayons lumineux
+    \item Décalage gravitationnel de la lumière vers le rouge 
+    \item Effet du trou noir sur l’étoile (temps propre beaucoup plus lent, déformation si c’est trop proche ??)
+\end{itemize}
+
+
+\section{Les outils mathématiques pour la relativité générale}
+
+Afin de procéder à une résolution numérique de ce problème dans le cadre de la relativité générale, on commence par définir les équations qui nous permettent de caractériser l’espace en question.\\ \vspace{-1em}
+
+On veut effectuer une simulation de l’espace définie par la métrique de Schwarzschild (en coordonnées sphériques). \\ \vspace{-1em}
+
+Soit la métrique de Schwarzschild définie telle que:
+\[ ds^2 = -\left(1-\frac{2GM}{c^2r}\right)dt^2+\left(1-\frac{2GM}{c^2r}\right)^{-1}dr^2+r^2\big(d\theta ^2 +\sin(\theta)d\varphi^2\big)\]
+Puisqu’on se place dans un plan défini par $\theta$ constant et égale à $\frac{\pi}{2}$, on peut simplifier l’expression de l'intervalle d'espace-temps:
+\[ ds^2 = -\left(1-\frac{2GM}{c^2r}\right)dt^2+\left(1-\frac{2GM}{c^2r}\right)^{-1}dr^2+r^2d\varphi^2\]
+
+Pour simuler numériquement un tel espace, nous avons d’abord besoin d'établir les équations géodésiques, qui vont définir le chemin le plus court entre deux points de l’espace. Pour cela, on résout les équations d’Euler Lagrange associées au système. Le lagrangien est défini comme : 
+\[\mathbf L=\frac{1}{2}\left(\left(1-\frac{2GM}{c^2r}\right)c^2\dot t^2-\left(1-\frac{2GM}{c^2r}\right)^{-1}\dot r^2 - r^2\dot \varphi^2\right)\]
+
+\newpage
+
+\underline{Résolution des équations EL} :
+\begin{itemize}[label=\textendash]
+    \item $t$ et $\varphi$ sont des variables cycliques qui donnent les deux constantes de mouvement $E$ et $L$ telles que : 
+    \begin{equation}\label{eq:1}\left(1-\frac{2GM}{c^2r}\right)\dot t = E = \text{cte}=\text{énergie totale de la particule conservée}\end{equation}\vspace{-2em}
+
+    \begin{equation}\label{eq:2}r^2\dot \varphi = L = \text{cte}=\text{moment cinétique conservé}\end{equation}
+    \item sur r : 
+
+    \[\frac{d\dot r}{d\tau}=-\frac{GM}{c^2r^2}\frac{E^2}{1-\frac{GM}{c^2r}}+\frac{L^2}{r^3}\left(1-\frac{GM}{c^2r}\right)+\frac{GM}{c^2r^2}\left(1-\frac{GM}{c^2r}\right)^{-1}\dot r^2\]
+      
+    qu'on peut réécrire dans le système d'unités géométrique $(c=G=1)$ comme: 
+    
+    \[\frac{d\dot r}{d\tau}=-\frac{2M}{r^2}\mathbf{L}+\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)\]
+\end{itemize}
+
+Ensuite, on choisit de fixer $\mathbf{L}$ à $\frac{1}{2}$ dans le cas du mouvement des particules massives, et à $0$ dans le cas de la lumière. On a donc :
+\begin{itemize}[label=\textendash]
+    \item Pour la lumière ($\mathbf L=0$) :
+    \begin{equation}\label{eq:3}
+        \frac{d\dot r}{d\tau}=\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)
+    \end{equation}
+    \item Pour une particule massive ($\mathbf L=\frac{1}{2}$): 
+    \begin{equation}\label{eq:4}\frac{d\dot r}{d\tau}=-\frac{M}{r^2}+\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)\end{equation}
+
+\end{itemize}
+
+\section{Application — Recherche de trajectoire}
+Nous avons ainsi établi les équations différentielles qui déterminent le mouvement dans l’espace; il nous est donc possible de \textbf{simuler la trajectoire d'objets célestes pour différentes conditions initiales}, à l'aide des modules \texttt{numpy}, \texttt{scipy} et \texttt{matplotlib}. 
+
+Pour cela, nous utiliserons les \textbf{équations géodésiques} (\ref{eq:3}, \ref{eq:4}) , obtenus grâce au lagrangien, ainsi que les \textbf{équations de conservation} (\ref{eq:1}, \ref{eq:2}) afin d'incrémenter les variables $(r,\varphi,t,\dot r)$. 
+
+Pour résoudre les équations différentielles, nous utiliserons la fonction \texttt{odeint}. Après avoir résolu le système, il sera possible de convertir les coordonnées sphériques en coordonnées cartésiennes et tracer la trajectoire dans le plan 2D, et éventuellement dans l'espace 3D si on se limite pas au cas $\theta$ constant. 
+
+En faisant varier les différents paramètres (masse $M$, position ou vitesse initiale $\vec r_0$, $\dot{\vec{r_0}},\dots$), on pourrait dans un premier temps chercher à établir des trajectoires elliptiques, mouvement du périhélie, les orbites stables et instables. Puis, on pourrait également étudier le comportement de la lumière proche de l'horizon des événements (effet de lentille, décalage vers le rouge\dots). 
+%%% La phrase "on pourrait dans un premier temps chercher à établir des trajectoires elliptiques, mouvement du périhélie" est un peu floue, il faudrait la reformuler
+
+\paragraph{Conditions initiales}
+Les conditions initiales données en input $(r_0, \varphi_0, V_{r_0}, V_{\varphi_0})$ sont définies dans un référentiel d'observateur distant du système \emph{(dans un temps ultérieur on pourrait tester également le cas où les C.I et les représentations graphiques concernent le référentiel propre, a voir si cela présente un intérêt réel)}.
+
+Pour pouvoir effectuer le calcul, on doit convertir les vitesses initiales en les dérivant par rapport au temps propre $\tau$. On établit la relation suivante:
+
+\[\left(\frac{dr_0}{dt}, \frac{d\varphi_0}{dt}\right)=\left(\frac{\dot r_0}{\dot t_0}, \frac{\dot \varphi _0}{\dot t_0}\right)\]
+ 
+On peut alors calculer les conditions initiales dans le référentiel propre. 
+
+Pour une particule massive (cas $\mathbf L=\frac{1}{2}$) :
+%%% Pas sûr du premier terme on dirait c'est un 1
+\[\mathbf L=\left[\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right]t_0^2\]
+
+Les conditions initiales dans le référentiel propre valent donc :
+\begin{align*}
+    &\frac{dt_0}{d\tau}=\left(\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right)^{\frac{1}{2}} \\
+    &\frac{dr_0}{d\tau}=V_{r_0}\dot t_0\\
+    &\frac{d\varphi _0}{d\tau}=V_{\varphi _0}\dot t_0\\
+\end{align*}
+On utilise alors ces conditions pour calculer les quantités conservées $E$ et $L$:
+\begin{align*}&E=\left(1-\frac{2M}{r_0}\dot t_0\right) \iff E=\left(1-\frac{2M}{r_0}\right)\cdot\left(\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right)^{\frac{1}{2}} \\
+&L = r_0^2 V_{\varphi_0}\dot t_0 \iff L= r_0^2 V_{\varphi_0}\left(\left(1-\frac{2M}{r_0}\right)-\left(1-\frac{2M}{r_0}\right)^{-1}V_{r_0}^2-r^2V_{\varphi _0}^2\right)^{\frac{1}{2}}\end{align*}
+%SOUCIS PARENTHESES
+
+
+
+\paragraph{Système différentiel} 
+Au final, on obtient à l'entrée: $(r_0,\varphi_0,\dot r_0, \dot \varphi_0)$. On peut exprimer le système différentielle par 4 relation d'incrémentation à utiliser dans \texttt{odeint} : 
+\begin{align*}
+&\frac{dt}{d\tau}=E\left(1-\frac{2M}{r}\right)^{-1}&\to\text{increment } t\\
+&\frac{dr}{d\tau}=\dot r&\to\text{increment } r\\
+&\frac{d\varphi}{d\tau}=\frac{L}{r^2}&\to\text{increment }\varphi\\
+&\frac{d\dot r}{d\tau}=-\frac{M}{r^2}+\frac{L^2}{r^3}\left(1-\frac{3M}{r}\right)&\to\text{increment } \dot r
+\end{align*}
+
+% \begin{python}
+%     #(increment t)
+%     #(increment r)
+%     #(increment phi)
+%     #(increment r_dot)
+% \end{python}
+
+\section{Structure des objets}
+
+Pour réaliser ce projet, nous allons créer plusieurs classes qui vont nous permettre de modéliser les différents objets célestes et de réaliser les calculs nécessaires.
+
+
+\begin{python}
+    class corps_celeste:
+        def __init__(self, masse, position, vitesse):
+            self.masse = masse
+            self.position = position
+            self.vitesse = vitesse
+
+        def geodesique(self):
+            #calcul des conditions initiales
+            #resolution du systeme differentiel
+            #conversion des coordonnees
+            #representation graphique
+
+    class etoile(corps_celeste):
+        def __init__(self, masse, position, vitesse):
+            super().__init__(masse, position, vitesse)
+            self.type = "etoile"
+            self.geodesique()
+    
+    class trou_noir(corps_celeste):
+        def __init__(self, masse, position, vitesse):
+            super().__init__(masse, position, vitesse)
+            self.type = "trou noir"
+            self.geodesique()
+    
+    class geometry:
+        def __init__(self):
+            #conversion coordonnees
+            #representation graphique
+
+        def espace_2D(self):
+            #representation 2D de la trajectoire
+        
+        def espace_3D(self):
+            #representation 3D de la trajectoire
+
+    class calc:
+        def __init__(self):
+            #calculs geodesiques
+            #calculs redshift
+            #calculs de l'effet du trou noir sur l'etoile
+            #representation graphique
+        
+        def geodesique(self):
+            #systeme differentiel
+            #resolution du systeme differentiel
+            #conversion des coordonnees
+            #representation graphique
+        def redshift(self):
+            #calcul du redshift
+            #representation graphique
+        def effet_trou_noir(self):
+            #calcul de l'effet du trou noir sur l'etoile
+            #representation graphique
+
+\end{python}
+\newpage
+\section{Références}
+
+%Rajouter d'autres références si nécessaire, la première je l'ai trouvé par hasard mais elle a l'air pas mal, et la deuxième c'est les notes de cours
+\begin{itemize}
+    \item \url{https://media4.obspm.fr/public/M2R/appliquettes/trounoir/geodesiques_doc.html}
+    \item \url{https://www-fourier.ujf-grenoble.fr/~faure/enseignement/projets_simulation/relativite_trou_noir/notes_trou_noir.pdf}
+\end{itemize}
+
+\end{document}
