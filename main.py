@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 
-# Generate a meshgrid for the 3D plot
+
 x = np.linspace(-5, 5, 100)
 y = np.linspace(-5, 5, 100)
 x, y = np.meshgrid(x, y)
