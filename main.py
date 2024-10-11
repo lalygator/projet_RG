@@ -75,7 +75,7 @@ phi_sol = sol[:, 2]
 x_sol = r_sol * np.cos(phi_sol)
 y_sol = r_sol * np.sin(phi_sol)
 
-# Plot the trajectory
+# Plot the trajectory in cartesien coordinates
 plt.plot(x_sol, y_sol)
 plt.xlabel('x')
 plt.ylabel('y')
@@ -86,6 +86,16 @@ plt.grid(True)
 #plt.gca().set_aspect('equal', adjustable='box')
 plt.show()
 plt.show()
+
+# Plot the trajectory in polar coordinates
+#    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+#    plt.plot(phi_sol, r_sol)
+#    plt.xlabel('phi')
+#    plt.ylabel('r')
+#    plt.title('Particle trajectory in Schwarzschild spacetime')
+#    plt.grid(True)
+#    #plt.gca().set_aspect('equal', adjustable='box')
+#    plt.show()
 
 ######
 
