@@ -3,16 +3,17 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 
-
-x = np.linspace(-5, 5, 100)
-y = np.linspace(-5, 5, 100)
-x, y = np.meshgrid(x, y)
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-# Constants
-M = 1.0  # Mass of the black hole in natural units
+
+x = np.linspace(-5, 5, 100)   # Pour quoi faire?
+y = np.linspace(-5, 5, 100)
+x, y = np.meshgrid(x, y)
+
+
+ 
 
 # Function to define the derivatives for the ODE solver (geodesic equations)
 def geodesics(y, t, L, E, M):
@@ -26,7 +27,9 @@ def geodesics(y, t, L, E, M):
     return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
 
 
-"""E=
+"""
+M = 1.0 
+E=
 L=
 t0=
 r0=
@@ -57,6 +60,8 @@ plt.show()
 plt.show()
 
 ######
+
+### En bas: code de chatgpt peut etre faut
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
