@@ -47,14 +47,10 @@ dt_dtau=np.sqrt(((1-2*M/r0)-(1-2*M/r0)**(-1)*v_r**2-r0*v_phi**2))
 r_dot0=v_r*dt_dtau
 d_phi_d_tau=v_phi*dt_dtau
 
-
-
-
 # quantite conserves
 E=1-2*M/r0*dt_dtau
-
-
 L=r0**2*v_phi*dt_dtau
+
 print(dt_dtau, r_dot0, d_phi_d_tau, L, E )
 
 racine = fsolve(lambda r: M/(r**2) - L**2 /(r**3) + 3*M*L**2/(r**4), 2)
