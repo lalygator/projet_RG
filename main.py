@@ -18,6 +18,7 @@ x, y = np.meshgrid(x, y)
 # Function to define the derivatives for the ODE solver (geodesic equations)
 def geodesics(y, tau, L, E, M):
     t0, r, phi, r_dot= y  # phi_dot, t_dot = const
+    t0, r, phi, r_dot= y  # phi_dot, t_dot = const
  
     dt_dtau = E*(1-2*M/r)
     dr_dtau = r_dot
@@ -47,6 +48,8 @@ r_dot0=v_r*dt_dtau
 d_phi_d_tau=v_phi*dt_dtau
 
 
+
+
 # quantite conserves
 E=1-2*M/r0*dt_dtau
 
@@ -63,10 +66,16 @@ tau = np.linspace(0, 600000, 6000000)
 y0 = [t0, r0, phi0, r_dot0]
 
 
+y0 = [t0, r0, phi0, r_dot0]
+
+
+sol = odeint(geodesics, y0, tau, args=(L, E, M,))
 sol = odeint(geodesics, y0, tau, args=(L, E, M,))
 print(sol[0:6])
 
 # Extract the solutions
+r_sol = sol[:, 1]
+phi_sol = sol[:, 2]
 r_sol = sol[:, 1]
 phi_sol = sol[:, 2]
 
@@ -81,6 +90,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Particle trajectory in Schwarzschild spacetime')
 plt.grid(True)
+#plt.gca().set_aspect('equal', adjustable='box')
 #plt.gca().set_aspect('equal', adjustable='box')
 plt.show()
 plt.show()
