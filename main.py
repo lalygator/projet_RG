@@ -4,7 +4,6 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import odeint
 from scipy.optimize import fsolve
-from scipy.optimize import fsolve
 
 import numpy as np
 from scipy.integrate import odeint
@@ -37,10 +36,7 @@ c = 299792458
 M = 1 # correspond à une masse de 3 masse solaire M_0 = 2*1e30
 r0 = 28.5
 t0 = 0
-r0 = 28.5
-t0 = 0
 phi0 = 0.0
-v_phi = 5/100
 v_phi = 5/100
 v_r = 1/100
 
@@ -66,28 +62,11 @@ tau = np.linspace(0, 600000, 6000000)
 
 
 y0 = [t0, r0, phi0, r_dot0]
-racine = fsolve(lambda r: M/(r**2) - L**2 /(r**3) + 3*M*L**2/(r**4), 2)
-print(racine)
 
-tau = np.linspace(0, 600000, 6000000)
-
-
-y0 = [t0, r0, phi0, r_dot0]
-
-
-y0 = [t0, r0, phi0, r_dot0]
-
-
-sol = odeint(geodesics, y0, tau, args=(L, E, M,))
-sol = odeint(geodesics, y0, tau, args=(L, E, M,))
 sol = odeint(geodesics, y0, tau, args=(L, E, M,))
 print(sol[0:6])
 
 # Extract the solutions
-r_sol = sol[:, 1]
-phi_sol = sol[:, 2]
-r_sol = sol[:, 1]
-phi_sol = sol[:, 2]
 r_sol = sol[:, 1]
 phi_sol = sol[:, 2]
 
