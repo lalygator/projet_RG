@@ -16,8 +16,8 @@ x, y = np.meshgrid(x, y)
  
 
 # Function to define the derivatives for the ODE solver (geodesic equations)
-def geodesics(y, t, L, E, M):
-    t, r, phi, r_dot= y
+def geodesics(y, tau, L, E, M):
+    t, r, phi, r_dot= y  # phi_dot, t_dot = const
  
     dt_dtau = E*(1-2*M/r)
     dr_dtau = r_dot
@@ -26,7 +26,7 @@ def geodesics(y, t, L, E, M):
     
     return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
 
-
+tau = np.linspace(0, 100, 1000)
 """
 M = 1.0 
 E=
