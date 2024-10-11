@@ -18,7 +18,7 @@ x, y = np.meshgrid(x, y)
 
 # Function to define the derivatives for the ODE solver (geodesic equations)
 def geodesics(y, tau, L, E, M):
-    r, phi, r_dot= y  # phi_dot, t_dot = const
+    t0, r, phi, r_dot= y  # phi_dot, t_dot = const
  
     dt_dtau = E*(1-2*M/r)
     dr_dtau = r_dot
@@ -31,11 +31,12 @@ def geodesics(y, tau, L, E, M):
 #t0 = 0
 G = 6.67430e-11
 c = 299792458
-M = 3 # correspond à une masse de 3 masse solaire M_0 = 2*1e30
-r0 = M_0 * G / c**2
+M = 1 # correspond à une masse de 3 masse solaire M_0 = 2*1e30
+r0 = 20
+t0=0
 phi0 = 0.0
-v_phi = 1
-v_r = np.sqrt(M)
+v_phi = 1/100
+v_r = 1/100
 
 # print((1-2*M/r0))
 # print((1-2*M/r0)**(-1)*v_r**2)
@@ -45,20 +46,27 @@ v_r = np.sqrt(M)
 dt_dtau=np.sqrt(((1-2*M/r0)-(1-2*M/r0)**(-1)*v_r**2-r0*v_phi**2))
 r_dot0=v_r*dt_dtau
 d_phi_d_tau=v_phi*dt_dtau
+
+
 # quantite conserves
 E=1-2*M/r0*dt_dtau
-L=r0^2*v_phi*dt_dtau
 
-tau = np.linspace(0, 100, 1000)
 
-"""
-y0 = [r0, phi0, r_dot0]
-t = np.linspace(0, tmax, N)
+L=r0**2*v_phi*dt_dtau
+print(dt_dtau, r_dot0, d_phi_d_tau, L, E )
 
-sol = odeint(geodesics, y0, t, args=(L, E, M,))
+tau = np.linspace(0, 6000, 60000)
+
+
+y0 = [t0, r0, phi0, r_dot0]
+
+
+sol = odeint(geodesics, y0, tau, args=(L, E, M,))
 print(sol[0:6])
 
 # Extract the solutions
+r_sol = sol[:, 1]
+phi_sol = sol[:, 2]
 
 
 # Convert to Cartesian coordinates for plotting
@@ -71,7 +79,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Particle trajectory in Schwarzschild spacetime')
 plt.grid(True)
-plt.gca().set_aspect('equal', adjustable='box')
+#plt.gca().set_aspect('equal', adjustable='box')
 plt.show()
 plt.show()
 
@@ -128,5 +136,3 @@ import matplotlib.pyplot as plt
 # plt.grid(True)
 # plt.gca().set_aspect('equal', adjustable='box')
 # plt.show()
-
-"""
