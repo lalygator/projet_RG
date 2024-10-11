@@ -4,20 +4,21 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import odeint
 
-# Generate a meshgrid for the 3D plot
-x = np.linspace(-5, 5, 100)
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+
+x = np.linspace(-5, 5, 100)   # Pour quoi faire?
 y = np.linspace(-5, 5, 100)
 x, y = np.meshgrid(x, y)
 
-t_max = 10 # Maximum time for the animation
-N = 1000 # Number of time steps
 
-# Constants
-M = 1.0  # Mass of the black hole in natural units
+ 
 
 # Function to define the derivatives for the ODE solver (geodesic equations)
-def geodesics(y, t, L, E, M):
-    t, r, phi, r_dot = y
+def geodesics(y, tau, L, E, M):
+    t, r, phi, r_dot= y  # phi_dot, t_dot = const
  
     dt_dtau = E*(1-2*M/r)
     dr_dtau = r_dot
@@ -26,13 +27,10 @@ def geodesics(y, t, L, E, M):
     
     return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
 
-
-dt_dtau =
-
-E = (1-2*M/r_0)*dt_dtau
-L = r_0**2*dphi_dtau
-
-"""E=
+tau = np.linspace(0, 100, 1000)
+"""
+M = 1.0 
+E=
 L=
 t0=
 r0=
@@ -62,10 +60,12 @@ plt.gca().set_aspect('equal', adjustable='box')
 plt.show()
 plt.show()
 
-# ######
-# import numpy as np
-# from scipy.integrate import odeint
-# import matplotlib.pyplot as plt
+######
+
+### En bas: code de chatgpt peut etre faut
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
 
 # # Constants
 # M = 1.0  # Mass of the black hole in natural units
