@@ -43,7 +43,7 @@ v_r = 1/100
 # print(r0*v_phi**2)
 
 #  ref propre
-dt_dtau=np.sqrt(((1-2*M/r0)-(1-2*M/r0)**(-1)*v_r**2-r0*v_phi**2))
+dt_dtau=1/np.sqrt(((1-2*M/r0)-(1-2*M/r0)**(-1)*v_r**2-r0*v_phi**2))
 r_dot0=v_r*dt_dtau
 d_phi_d_tau=v_phi*dt_dtau
 
