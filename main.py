@@ -27,15 +27,25 @@ def geodesics(y, tau, L, E, M):
     
     return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
 
-tau = np.linspace(0, 100, 1000)
-"""
-M = 1.0 
-E=
-L=
+#ref distant
 t0=
 r0=
 phi0=
-r_dot0="""
+v_phi=
+v_r=
+M = 1.0 
+
+
+#  ref propre
+dt_dtau=((1-2M/r0)-(1-2M/r0)^(-1)*v_r^2-r0*v_phi^2)^(1/2)
+r_dot0=v_r*dt_dtau
+d_phi_d_tau=v_phi*dt_dtau
+# quantite conserves
+E=1-2M/r0*dt_dtau
+L=r0^2*v_phi*dt_dtau
+
+tau = np.linspace(0, 100, 1000)
+"""
 
 y0 = [t0, r0, phi0, r_dot0]
 t = np.linspace(0, tmax, N)
