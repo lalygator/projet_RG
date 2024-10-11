@@ -18,7 +18,7 @@ x, y = np.meshgrid(x, y)
 
 # Function to define the derivatives for the ODE solver (geodesic equations)
 def geodesics(y, tau, L, E, M):
-    t, r, phi, r_dot= y  # phi_dot, t_dot = const
+    r, phi, r_dot= y  # phi_dot, t_dot = const
  
     dt_dtau = E*(1-2*M/r)
     dr_dtau = r_dot
@@ -28,26 +28,31 @@ def geodesics(y, tau, L, E, M):
     return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
 
 #ref distant
-t0=
-r0=
-phi0=
-v_phi=
-v_r=
-M = 1.0 
+#t0 = 0
+G = 6.67430e-11
+c = 299792458
+M = 3 # correspond à une masse de 3 masse solaire M_0 = 2*1e30
+r0 = M_0 * G / c**2
+phi0 = 0.0
+v_phi = 1
+v_r = np.sqrt(M)
 
+# print((1-2*M/r0))
+# print((1-2*M/r0)**(-1)*v_r**2)
+# print(r0*v_phi**2)
 
 #  ref propre
-dt_dtau=((1-2M/r0)-(1-2M/r0)^(-1)*v_r^2-r0*v_phi^2)^(1/2)
+dt_dtau=np.sqrt(((1-2*M/r0)-(1-2*M/r0)**(-1)*v_r**2-r0*v_phi**2))
 r_dot0=v_r*dt_dtau
 d_phi_d_tau=v_phi*dt_dtau
 # quantite conserves
-E=1-2M/r0*dt_dtau
+E=1-2*M/r0*dt_dtau
 L=r0^2*v_phi*dt_dtau
 
 tau = np.linspace(0, 100, 1000)
-"""
 
-y0 = [t0, r0, phi0, r_dot0]
+"""
+y0 = [r0, phi0, r_dot0]
 t = np.linspace(0, tmax, N)
 
 sol = odeint(geodesics, y0, t, args=(L, E, M,))
@@ -124,3 +129,4 @@ import matplotlib.pyplot as plt
 # plt.gca().set_aspect('equal', adjustable='box')
 # plt.show()
 
+"""
