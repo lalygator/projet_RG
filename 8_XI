@@ -1,0 +1,298 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.animation import FuncAnimation
+from scipy.integrate import odeint
+import scipy.optimize
+from scipy.optimize import *
+
+import sys 
+import matplotlib.gridspec as gridspec
+
+import numpy as np
+from scipy.integrate import odeint
+from scipy.optimize import fsolve
+import matplotlib.pyplot as plt
+
+
+"""x = np.linspace(-5, 5, 100)   # Pour quoi faire?
+y = np.linspace(-5, 5, 100)
+x, y = np.meshgrid(x, y)"""
+
+"""import manim 
+from manim import *
+class visual(Scene):
+    def construct(self):
+        text=Text("Bonjour")
+        self.play(text)
+
+sys.exit()"""
+
+ 
+
+# Function to define the derivatives for the ODE solver (geodesic equations)
+def geodesics(y, tau, L, E, M):
+    t0, r, phi, r_dot= y  # phi_dot, t_dot = const
+
+    dt_dtau = E / (1 - 2 * M / r)# E*(1-2*M/r) #
+    #print(E*(1-2*M/r))
+    dr_dtau = r_dot
+    dphi_dtau = L / r**2
+    drdot_dtau = -(M / r**2) + (L**2 / r**3) - (3 * M * L**2) / r**4   #ok
+    
+    return [dt_dtau, dr_dtau, dphi_dtau, drdot_dtau]
+
+
+
+####  Jesli od razu def w ref propre - bez conversji
+M=1
+dt_dtau =1   #
+v_r = 0 #1*1/100
+
+L=9*9*0.05
+
+if L>=(12)**(1/2)*M:
+
+    print("racines existent")
+    r_plus=((L**2+np.sqrt(L**4-12*(M**2)*L**2))/2/M)
+    r_moins=((L**2-np.sqrt(L**4-12*(M**2)*L**2))/2/M)
+
+else:
+    print("pas des racines")
+
+print(r_moins,r_plus)
+
+r=r_moins-1 #r_moins-0.4
+
+v_phi=L/r**2
+E=np.sqrt((1 - 2 * M / r) * (1 + L**2 / r**2))  #??(1-2*M/r) A une importance seulement pour le temps propre
+
+t0=1
+phi0 = 0.0
+
+print("param", dt_dtau, v_r, v_phi, L, E )
+
+tau = np.linspace(0, 6000, 60000)
+y0 = [t0, r, phi0, v_r]
+
+
+sol = odeint(geodesics, y0, tau, args=(L, E, M,))
+sol_t0, sol_r, sol_phi, sol_r_dot = sol[:, 0] , sol[:, 1] ,sol[:, 2] ,sol[:, 3] 
+x_sol =  sol_r * np.cos(sol_phi)
+y_sol =  sol_r * np.sin(sol_phi)
+
+##### PLOT  ######################################################################################################################################
+plot_t="f" # s: plot d'orbite, "m" plot d'orbite et des solutions pour phi,r et vr
+
+# Convert to Cartesian coordinates for plotting
+
+if plot_t=="s":
+
+    plt.plot(x_sol, y_sol)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    titl='Trajectoire de la masse. R: '+str( r )+'  M: '+ str(M )+ '  V_phi: ' +str(v_phi)+ "V_r: "+ str( v_r)
+    plt.scatter(x=0, y=0, c='black')
+    plt.title(titl)
+    plt.grid(True)
+    #plt.gca().set_aspect('equal', adjustable='box')
+    plt.show()
+
+#########################################################################################################################################
+# ANIMATION 
+
+####################
+fig, ax = plt.subplots()
+#ax.set_aspect('equal', adjustable='box')
+if np.min(x_sol)<0:
+    ax.set_xlim(np.min(x_sol)-0.1*np.max(x_sol), np.max(x_sol)+0.1*np.max(x_sol))
+    ax.set_ylim(np.min(y_sol)-0.1*np.max(y_sol), np.max(y_sol)+0.1*np.max(y_sol))
+else:
+    ax.set_xlim(-np.max(x_sol)+0.1*np.max(x_sol), np.max(x_sol)+0.1*np.max(x_sol))
+    ax.set_ylim(np.min(y_sol)-0.1*np.max(y_sol), np.max(y_sol)+0.1*np.max(y_sol))
+
+
+ax.plot(0, 0, 'ko', markersize=10) # trou noire
+
+
+line, = ax.plot(x_sol[0:1], y_sol[0:1], 'b-', lw=0.5)    # trajectoire
+planet, = ax.plot(x_sol[0], y_sol[0], 'ro', markersize=3)  # position initiale
+
+def animate(frame):
+    line.set_data(x_sol[:frame], y_sol[:frame])
+    planet.set_data(x_sol[frame], y_sol[frame])
+    return line, planet
+
+
+if r<r_moins:
+    skip_factor = 1  #frames=range(0, len(x_sol), skip_factor)  frames=len(x_sol)
+
+else:
+    lim=3
+    a=(lim-1)/(r_plus-r_moins)
+    b=lim-a*r_plus
+    skip_factor = int(a*r+b)  #frames=range(0, len(x_sol), skip_factor)  frames=len(x_sol)
+    print(skip_factor)
+    print(a,b,a*r_plus+b,a*r_moins+b)
+    skip_factor = 10
+ani = FuncAnimation(fig, animate, frames=range(0, len(x_sol), skip_factor), blit=True, interval=1)
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title("Trajectoire d'une planete autour de trou noire. R:"+str(round(r,2)))
+plt.grid(True)
+plt.show()
+sys.exit()
+###########################################################################################################################################
+
+
+
+
+
+
+
+#plt.plot(sol_t0)
+
+#plt.show()
+#sys.exit()
+"""T=[]   #Partie energie a refaire
+V=[]
+for i in range(len(sol_r)):
+    T.append(sol_r_dot[i]**2*1/2)
+    #print("j",type((2*M/sol_r[i]-1)*(-1/2-1/2*L**2/sol_r[i]**2)))
+    #V.append((2*M/sol_r[i]-1)*(-1/2-1/2*L**2/sol_r[i]**2)) #cours
+    V.append(-M/sol_r[i]+L/(2*r**2)-M*L**2/r**3)   #exo 6 to wyglada sensownie w miarę bardziej niż z cours . DOBRE
+
+x= np.linspace(0, r+20, 1000)
+pot_r=[]
+
+# Potentiel en fonction de r ? 
+pot_r=(2*M/x-1)*(-1/2-1/2*L**2/x**2)  # STARE czy nie powinno sie anulować gdzieś? a raczej wypłaszczać, miec ekstremum?
+#mozna wyznaczyc ekstremum przez taux d'accroisamnt
+print("r",x)
+pot_r=(M/x-L/(2*x**2)-M*L**2/x**3)
+pot_r_0=(M/(x**2)-(x**2*v_phi)/(x**3)+3*M*(x**2*v_phi)**2/x**4)  #Przecoież l zależny od r oczywiscie 
+
+
+#for i in x:
+#print((M/(i**2)-L/(i**3)+3*M*L**2/i**4))
+
+#plt.plot(x,pot_r,color='blue')
+#plt.plot(x,pot_r_0,color='red')  #jak mozna zrobic generalna energie potencjalna jesli nie ma się L? 
+plt.plot(V,color='blue')
+plt.show()
+
+EV=[]
+for i in range(len(V)): 
+    EV.append(T[i] - V[i]) # plus czy -
+plt.plot(EV,color='blue')
+#print(V)
+plt.show()
+#sys.exit()
+
+plt.plot(T,color='blue')
+plt.show()
+
+# 1/2*v_r+(2*M/r-1)*(-1/2-1/2*L**2/r**2)=1/2*E**2
+#plt.plot(sol_r,color='blue')
+#plt.show()
+
+
+### Energie cinetique a chaque instant
+m=2000000
+
+T= 1/2* m *sol[:, 1]**2 + 1/2* m*(sol[:, 1]*sol[:, 2])**2
+#for i in range (0,len(T)):
+   #print(sol[:, 2][i], sol[:, 3][i])
+   #print(sol[:, 1][i]*sol[:, 2][i],(sol[:, 1][i]*sol[:, 2][i])**2 )  #sol 2 czeba zrobic z tego derivee
+#print(sol[:, 3][-6:],sol[:, 3][:10] )
+#plt.plot(T,color='blue')
+#plt.show()
+#print(len(T), type(T))
+#sys.exit()"""
+
+plot_t="s" # s: plot d'orbite, "m" plot d'orbite et des solutions pour phi,r et vr
+
+# Convert to Cartesian coordinates for plotting
+x_sol =  sol_r * np.cos(sol_phi)
+y_sol =  sol_r * np.sin(sol_phi)
+
+if plot_t=="s":
+
+    plt.plot(x_sol, y_sol)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    titl='Trajectoire de la masse. R: '+str( r )+'  M: '+ str(M )+ '  V_phi: ' +str(v_phi)+ "V_r: "+ str( v_r)
+    plt.scatter(x=0, y=0, c='black')
+    plt.title(titl)
+    plt.grid(True)
+    plt.gca().set_aspect('equal', adjustable='box')
+
+
+elif plot_t=="m":
+    fig, axes = plt.subplots(2,2, figsize=(10,10))
+    #gs = gridspec.GridSpec(2, 2, height_ratios=[3, 1])  # More space for the top row
+
+# First subplot - square plot
+    #axes[0][0] = fig.add_subplot(gs[0, 0])
+
+    axes[0][0].plot(x_sol, y_sol) # plot orbite
+    axes[0][0].scatter(x=0, y=0, c='black')
+    titl='Trajectoire de la masse. R: '+str( r )+'  M: '+ str(M )+ '  V_phi: ' +str(v_phi)+ "  V_r: "+ str( v_r)
+    axes[0][0].set_title(titl)
+    axes[0][0].set_xlabel("y")
+    axes[0][0].set_ylabel("x")
+    axes[0][0].grid(True)
+
+    axes[0][1].plot(sol_r) 
+    axes[0][1].set_title("Evolution de R au cours du temps")
+    axes[0][1].ticklabel_format(axis='x', style='sci', scilimits=(4,4))
+    axes[0][1].set_xlabel("temps")
+    axes[0][1].set_ylabel("R")
+    axes[0][1].grid(True)
+
+    axes[1][0].plot(sol_phi) # green (g) et croix (x)
+    axes[1][0].set_title("Evolution de phi au cours du temps")
+    axes[1][0].ticklabel_format(axis='x', style='sci', scilimits=(4,4))
+    axes[1][0].set_xlabel("temps")
+    axes[1][0].set_ylabel("phi")
+    axes[1][0].grid(True)
+
+    axes[1][1].plot(sol_r_dot) # par défaut, points reliés (bleus)
+    axes[1][1].set_title("Evolution du vitesse radiale au cours du temps")
+    axes[1][1].ticklabel_format(axis='x', style='sci', scilimits=(4,4))
+    axes[1][1].set_xlabel("temps")
+    axes[1][1].set_ylabel("V_r")
+    axes[1][1].grid(True)
+
+    #donner les noms au axes!
+
+    plt.subplots_adjust(left=0.1, right=0.9, bottom=0.1, top=0.9, wspace=0.3, hspace=0.3)
+
+
+elif plot_t=="en":
+    pass
+
+plt.show()
+
+######
+
+"""P=nombre des images
+def animate(p):
+    x = p/P # nombre qui variera de 0 à 1 pendant l'animation
+    j = np.arange(N) # liste fixe d'entiers de 0 à (N-1)
+    X=[]
+    print(j,x)
+    for a in range (0,5):
+      X.append(a*0.2*np.cos(2*np.pi*(x)/N))
+      #X = np.cos(2*np.pi*(j+x)/N) # liste des X[j](x)
+    print(X)
+    #sys.exit()
+    Y = np.sin(2*np.pi*(j+x)/N) # liste des Y[j](x)
+    l.set_data(X,Y) # place un point en (X,Y) sur le tracé 'l' initialement vide, puis le met à jour pendant l'animation
+
+
+
+animation.FuncAnimation(fig, animate, frames=P, interval=100) # interval en ms entre deux images"""
+
+
