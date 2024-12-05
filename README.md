@@ -1,5 +1,5 @@
 - Table des matières + organisation parties
-- Images
+- Images + régler problèmes affichage dans notebook
 - Limitations physiques dans le code (L qui devrait tomber mais s'enfuit)
 - Redshift (interprétation unité)
 - Ajout code geodesics_classical
