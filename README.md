@@ -1,0 +1,6 @@
+- Table des matières + organisation parties
+- Images
+- Limitations physiques dans le code (L qui devrait tomber mais s'enfuit)
+- Redshift (interprétation unité)
+- Ajout code geodesics_classical
+- Conclusion
